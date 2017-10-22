@@ -4,13 +4,58 @@ import java.util.Scanner;
 
 public class Calculator {
 
+    /**
+     * Operation, that will be executed, after any subsequent change in a and b
+     */
     private static Operation currentOperation = Operation.NONE;
+    /**
+     * "a" collector
+     */
     private static double a;
+    /**
+     * "b" collector
+     */
     private static double b;
+    /**
+     * If "a" initialized
+     */
     private static boolean isInitA = false;
+    /**
+     * If "b" initialized
+     */
     private static boolean isInitB = false;
 
-    public static double getNumber(String line){
+    /**
+     * Getter for a
+     * @return a
+     */
+    public static double getA(){
+        return a;
+    }
+
+    /**
+     * Getter for b
+     * @return b
+     */
+    public static double getB(){
+        return b;
+    }
+
+    /**
+     * Getter for currentOperation
+     * @return currentOperation
+     */
+    public static Operation getCurrentOperation(){
+        return currentOperation;
+    }
+
+    /**
+     * Take number from line, like "a:[number].
+     * @throws IllegalArgumentException if line can't be parsed
+     * @param line input line, that must be parsed
+     * @return Number from line
+     */
+    public static double getNumber(String line) throws IllegalArgumentException{
         double t;
         try{
             t = Double.parseDouble(line.substring(2,line.length()));
@@ -21,7 +66,12 @@ public class Calculator {
         return t;
     }
 
-    public static Operation getOperation(char sign){
+    /**
+     * @param sign character of operation
+     * @return Operation appropriate sign
+     * @throws IllegalArgumentException if no operation appropriate sign
+     */
+    public static Operation getOperation(char sign) throws IllegalArgumentException{
         switch (sign){
             case '+':
                 return Operation.PLUS;
@@ -36,7 +86,11 @@ public class Calculator {
         }
     }
 
-    public static void print() {
+    /**
+     * Prints expression for current operation
+     * @throws IllegalArgumentException if "a" of "b" is not initialized
+     */
+    public static void print() throws IllegalArgumentException{
         if (!isInitA){
             throw new IllegalArgumentException("\"a\" is not initialized");
         }
@@ -47,7 +101,12 @@ public class Calculator {
             System.out.println(currentOperation.result(a,b));
     }
 
-    public static void parseCommand(String command){
+    /**
+     * Parses command and calls corresponding method
+     * @param command Input command
+     * @throws IllegalArgumentException if command can't be parsed correctly
+     */
+    public static void parseCommand(String command)  throws IllegalArgumentException{
         if (command.length() == 1) {
             currentOperation = getOperation(command.charAt(0));
             print();
@@ -78,7 +137,7 @@ public class Calculator {
             try {
                 parseCommand(line);
             }
-            catch (IllegalArgumentException e){
+            catch (IllegalArgumentException | ArithmeticException e){
                 System.out.println(e.getMessage());
             }
             catch (Exception e){
